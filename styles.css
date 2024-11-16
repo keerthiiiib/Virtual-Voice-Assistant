@@ -1,0 +1,56 @@
+/* General styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fcbbdd;
+}
+
+#container {
+    text-align: center;
+}
+
+#assistant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#output {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+button#micBtn {
+    background-color: #fcbbdd;
+    border: none;
+    padding: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+button#micBtn img {
+    width: 30px;
+    height: 30px;
+}
+
+button#micBtn:hover {
+    background-color: #fcbbdd;
+}
+
+#status {
+    margin-top: 20px;
+    font-size: 1.1em;
+}
+
+#statusText {
+    color: #333;
+}

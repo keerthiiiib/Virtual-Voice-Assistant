@@ -1,52 +1,52 @@
-import os
-import requests
+import tensorflow as tf
+import numpy as np
 from PIL import Image
-from io import BytesIO
+import os
 
 def generate_image():
     try:
-        # Define the path to save the image
-        file_path = os.path.join("assets", "a.png")
+        # Get the directory of the current script
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Define the 'assets' folder path within the 'AI' directory
+        assets_dir = os.path.join(script_dir, "assets")
+        
+        # Ensure the 'assets' folder exists
+        os.makedirs(assets_dir, exist_ok=True)
+        
+        # Generate a pink gradient pattern for the cake background
+        width, height = 256, 256
+        x = np.linspace(255, 200, width, dtype=np.uint8)  # Pinkish gradient
+        y = np.linspace(255, 200, height, dtype=np.uint8)
+        xv, yv = np.meshgrid(x, y)
 
-        # Ensure the directory exists
-        if not os.path.exists("assets"):
-            os.makedirs("assets")
-            print(f"Created 'assets' directory.")
+        # Apply the gradient to all RGB channels (pink shades)
+        red_channel = xv
+        green_channel = (xv + yv) // 4  # Lighter green for a soft touch
+        blue_channel = (xv + yv) // 3  # A mix of blue for the soft kawaii effect
 
-        # Unsplash API key (sign up for free at https://unsplash.com/developers)
-        api_key = 'sUj4fzEgULgiZOWa3uL_1I-_Lzvolx6YCadhutc09f8'  # Replace with your Unsplash API key
-        url = "https://api.unsplash.com/photos/random"
+        # Stack the channels to create a pinkish image with a gradient effect
+        image_array = np.stack([red_channel, green_channel, blue_channel], axis=-1)
 
-        # Define the search query or keyword (you can change the prompt to whatever you want)
-        query = "nature landscape"  # You can change this to any keyword like "mountains", "beach", etc.
+        # Create the "cake" shape with a rectangle in the middle
+        cake_top = (slice(80, 176), slice(80, 176))  # Middle part of the image
+        image_array[cake_top] = [255, 182, 193]  # Light pink for the cake
 
-        # Send a request to the Unsplash API to get a random photo based on the query
-        response = requests.get(
-            url,
-            params={
-                'query': query,
-                'client_id': api_key,  # Unsplash API requires 'client_id' for authentication
-                'orientation': 'landscape'  # Optional: to get landscape-oriented images
-            }
-        )
+        # Add a "whipped cream" top
+        whipped_cream_top = (slice(60, 80), slice(60, 196))
+        image_array[whipped_cream_top] = [255, 255, 255]  # White for the cream
 
-        # Check if the response is successful
-        if response.status_code == 200:
-            # Get the image URL from the response
-            image_url = response.json()[0]['urls']['regular']
+        # Add a cherry on top (small red dot)
+        cherry_pos = (60, 128)  # Center of the cake
+        image_array[cherry_pos] = [255, 0, 0]  # Red cherry
 
-            # Download the image
-            img_data = requests.get(image_url).content
-            img = Image.open(BytesIO(img_data))
+        # Convert the array to a PIL image
+        image = Image.fromarray(image_array, mode="RGB")
 
-            # Save the image locally
-            img.save(file_path)
-            print(f"Image generated and saved at {file_path}")
-        else:
-            print(f"Error fetching image: {response.status_code}")
-            print(f"Response text: {response.text}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"Request error: {e}")
+        # Save the generated image in the 'assets' folder
+        save_path = os.path.join(assets_dir, "pink_cake_image.png")
+        image.save(save_path)
+        print(f"Image generated successfully! Check the file at '{save_path}'.")
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"Error generating image: {str(e)}")
+

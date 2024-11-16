@@ -1,0 +1,11 @@
+pyttsx3             # For text-to-speech
+speechrecognition    # For speech-to-text
+requests             # For making API requests
+pywhatkit            # For opening websites, playing YouTube videos, etc.
+pillow               # For screenshot functionality
+tensorflow           # For AI-related tasks, if you want to add AI features
+openai               # For integrating with GPT-3 (optional, for conversational AI)
+newsapi-python      # For fetching the latest news
+pyjokes              # For telling jokes
+yfinance             # For stock/financial data (optional)
+pydub                # For handling audio files (optional)
